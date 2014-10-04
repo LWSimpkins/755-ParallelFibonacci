@@ -6,7 +6,8 @@
 
  Calculates Fibonnaci numbers. 
  User inputs number, n, of Fibonacci numbers to generate by command line.
- The Fibonacci sequence will generate the numbers from [0-n], inclusive
+ The Fibonacci sequence will generate the numbers from [0-n); the first n numbers
+ in the sequence. n is not inclusive, since the sequence starts at 0.
  A separate thread is spawned to generate the Fibonacci numbers.
  The numbers will be stored in an array; both threads can access it.
  The parent thread must wait for the child thread to complete.
@@ -22,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         //check if a number was input via command line
         if (args.length > 0) {
-            int n = 0;  //The nth Fibonacci number to calculate
+            int n = 0;  //How many Fibonacci numbers to calculate
 
             //Verify the command line argument was a number
             try {
@@ -34,22 +35,24 @@ public class Main {
 
             //Verify n is >=0
             if (n < 0) {
-                System.err.println("The command lin argument must be 0 or greater");
+                System.err.println("The command line argument must be 0 or greater");
             } else {
-            //Create an array to share with the new thread; stores the Fibonacci
-                //numbers. array is n+1, since the sequence is [0-n] inclusive
-                int[] sharedArray = new int[n + 1];
+                //Create an array to share with the new thread; stores the Fibonacci
+                //numbers. array is n, since the sequence is [0-n)
+                int[] sharedArray = new int[n];
 
                 //Create and start new thread
-                Thread thread = new Thread(new Fibonacci(n, sharedArray));
+                //Pass n-1, since it calculates the first n numbers in the 
+                // sequence; F(0) to F(n-1)
+                Thread thread = new Thread(new Fibonacci(n-1, sharedArray));
                 thread.start();
                 try {
                 //join the threads. This makes the parent wait for the child to complete
                     //before continuing
                     thread.join();
                     //print out the Fibonacci sequence
-                    System.out.println("The Fibonacci sequence from F(0)-F(" + n + ")");
-                    for (int i = 0; i <= n; i++) {
+                    System.out.println("The first " + n + " numbers in the Fibonacci sequence:");
+                    for (int i = 0; i < n; i++) {
                         System.out.print(sharedArray[i] + " ");
                     }
 
