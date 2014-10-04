@@ -5,7 +5,7 @@ COMP 755
 10/4/14
 
 Is given n and an array.
-Calculates the Fibonacci sequence from 0-n.
+Calculates the Fibonacci sequence from [0-n] (0 and n are inclusive)
 Stores the sequence in the array.
  */
 
